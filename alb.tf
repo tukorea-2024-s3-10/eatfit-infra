@@ -3,7 +3,7 @@ resource "aws_lb" "eatfit_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.eatfit_alb_sg.id]
-  subnets            = ["subnet-00389885a11689564", "subnet-041492e3c727632cf"]
+  subnets            = ["subnet-09f5fbc4af1acfb4e", "subnet-041492e3c727632cf"]
 
   enable_deletion_protection = false
 }
@@ -33,6 +33,22 @@ resource "aws_lb_listener" "http_listener" {
       port        = "443"
       protocol    = "HTTPS"
       status_code = "HTTP_301"
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "route_ai_api" {
+  listener_arn = aws_lb_listener.https_listener.arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.eatfit_ai_tg.arn
+  }
+
+  condition {
+    path_pattern {
+      values = ["/api/ai*", "/api/ai/*"]
     }
   }
 }

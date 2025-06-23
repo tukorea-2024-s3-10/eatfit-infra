@@ -12,8 +12,8 @@ resource "aws_security_group" "eatfit_backend_sg" {
 
   ingress {
     description     = "HTTP from ALB SG"
-    from_port       = 80
-    to_port         = 80
+    from_port       = 8080
+    to_port         = 8080
     protocol        = "tcp"
     security_groups = [aws_security_group.eatfit_alb_sg.id]
   }
